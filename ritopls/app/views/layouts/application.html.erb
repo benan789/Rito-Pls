@@ -5,10 +5,78 @@
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+  <script>
+  
+  var onload = function() {
+    console.log("sdf")
+     $('#login').click(function(event) {
+      event.preventDefault();
+      var logged = document.getElementById('logged')
+      var username = $('#session_username').val();
+      var password = $('#session_password').val();
+      var object = {
+        username: username,
+        password: password
+      };
+      var json = JSON.stringify(object);
+
+      $.ajax({
+        url: "/login.json",
+        data: json,
+        method: 'post',
+        dataType: 'json',
+        success: function(data) {
+          if (data["status"] == "SUCCESS") {
+            logged.innerHTML = "Logged in as: " + username;
+          } else {
+            alert(data["status"]);
+          }
+         }
+       });
+     })
+  }
+    $(document).ready =(onload)
+    $(window).bind('page:change', onload)   
+
+  </script>
 </head>
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Rito Pls</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+      </ul>
+        <%= form_for :session, url: sessions_path, html: {class: "navbar-form navbar-left"} do |f| %>
+        <div class="form-group">
+	        	<%= f.text_field :username, class: "form-control", placeholder: "Username" %>
+	          <%= f.text_field :password, class: "form-control", placeholder: "Password" %>
+        </div>
+            <%= f.submit "Login", class: "btn btn-default", id: "login" %>
+        <% end %>
+        <div class="navbar-brand" id="logged"></div>
+       <form class="navbar-form navbar-right">
+        <div class="form-group">
+        	<input type="text" class="form-control" placeholder="Search">
+        </div>
+      </form>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 <body>
 
 <%= yield %>
+<%= debug(params) %>
 
 </body>
 </html>

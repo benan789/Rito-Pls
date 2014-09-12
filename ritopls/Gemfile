@@ -10,6 +10,13 @@ gem 'mongoid', github: 'mongoid/mongoid'
 gem 'sass-rails', '~> 4.0.2'
 gem 'bootstrap-sass', '~> 3.2.0'
 
+# RSpec
+group :development, :test do
+  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'database_cleaner'
+end
+
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
