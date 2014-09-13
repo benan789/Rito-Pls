@@ -10,6 +10,7 @@ class SessionsController < ApplicationController
 
 		if user && user.authenticate(data_json["password"])
 			@logged_in = true
+			@user = user
 		else
 			@logged_in = false
 		end

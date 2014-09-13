@@ -5,7 +5,8 @@ Ritopls::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'champions#index'
 
-  post 'login/' => 'sessions#create', as: :sessions
+  post '/users' => 'users#find'
+  post 'login/' => 'sessions#create'
 
   # resources :sessions
 
