@@ -6,9 +6,11 @@ class User
 
   has_many :comments
 
-  # def password=(input_password)
-  # 	self.password = input_password
-  # end
+  def passwordarr=(passwordarr)
+    if passwordarr[0] == passwordarr[1]
+      self.password = passwordarr[0]
+    end
+  end
 
   def authenticate(password_auth)
   	if password_auth && self.password == password_auth

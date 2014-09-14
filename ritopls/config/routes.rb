@@ -6,7 +6,10 @@ Ritopls::Application.routes.draw do
   root 'champions#index'
 
   post '/users' => 'users#find'
+  post 'findusername/' => 'users#usernamefind'
+  post 'findemail/' => 'users#emailfind'
   post 'login/' => 'sessions#create'
+  post 'signup/' => 'users#create'
 
   # resources :sessions
 
