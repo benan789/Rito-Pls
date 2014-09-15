@@ -9,7 +9,7 @@
  
   var onload = function() {
     var cookie = document.cookie.slice(3)
-    var username = $('#username').val();
+    var username = $('#username').val().toLowerCase();
     var usernamebox = document.getElementById('username')
     var passwordbox = document.getElementById('password')
     var logged_in = function(data){
@@ -52,42 +52,76 @@
      });
     $('#signup').click(function(event) {
       event.preventDefault();
-      var newusername = $('#newusername').val();
-      var newemail = $('#newemail').val();
+      var newusername = $('#newusername').val().toLowerCase();
+      var newemail = $('#newemail').val().toLowerCase();
       var newpassword = $('#newpassword').val();
       var newpassword2 = $('#newpassword2').val();
-      var nousername = true;
-      var noemail = true;
+      var usernameinput = document.getElementById('newusername')
+      var emailinput = document.getElementById('newemail')
+      var passwordinput = document.getElementById('newpassword')
+      var password2input = document.getElementById('newpassword2')
+      var usernameerror = document.getElementById('usernameerror')
+      var emailerror = document.getElementById('emailerror')
+      var passworderror = document.getElementById('passworderror')
+      var object = {
+        newusername: newusername,
+        newemail: newemail
+      };
+      var json = JSON.stringify(object);
 
+      if(newusername == "") {
+        usernameerror.innerHTML = "Enter a Username";
+        usernameinput.style.borderColor = 'red'
+      } else {
+        usernameerror.innerHTML = ""
+        usernameinput.style.borderColor = 'green'
+      }
+      if(newemail == "") {
+        emailerror.innerHTML = "Enter an E-mail"
+        emailinput.style.borderColor = 'red'
+      } else {
+        emailerror.innerHTML = ""
+        emailinput.style.borderColor = 'green'
+      }
+      if(newpassword == "") {
+        passworderror.innerHTML = "Enter a Password"
+        passwordinput.style.borderColor = 'red'
+      } else {
+        passworderror.innerHTML = ""
+      }
+      if(newpassword !== "" && newpassword !== newpassword2) {
+            passworderror.innerHTML = "Passwords do not match"
+            passwordinput.style.borderColor = 'red'
+            password2input.style.borderColor = 'red'
+          } else if(newpassword !== "") {
+            passwordinput.style.borderColor = 'green'
+            password2input.style.borderColor = 'green'
+          }
       $.ajax({
-        url: "findusername",
-        data: newusername,
+        url: "finduser",
+        data: json,
         method: 'post',
         success: function(data) {
-          alert("username already exists")
-        },
-        error: function(){
-          checkemail();
-        }
-      });
-
-      var checkemail = function() {
-        $.ajax({
-          url: "findemail",
-          data: newemail,
-          method: 'post',
-          success: function(data) {
-            alert("email already exists")
-            noemail = false
-          },
-          error: function(){
-          signup();
-        }
-        });
+          if(newusername !== "" && data.newusername !== null) {
+            usernameerror.innerHTML = "Username already exists"
+            usernameinput.style.borderColor = 'red'
+          } else if(newusername !== "") {
+            usernameinput.style.borderColor = 'green'
+          }
+          if(newemail !== "" && data.newemail !== null) {
+            emailerror.innerHTML = "E-mail already exists"
+            emailinput.style.borderColor = 'red'
+          } else if(newemail !== "") {
+            emailinput.style.borderColor = 'green'
+          }
+          if(newusername !== "" && newemail !== "" && newpassword !== "" && data.newusername == null && data.newemail == null && newpassword == newpassword2) {
+              signup();
+          }
        }
+      });
+    
 
       var signup = function() {
-        if(nousername && noemail && newpassword == newpassword2) {
           var object = {
             username: newusername,
             email: newemail,
@@ -105,9 +139,6 @@
               document.cookie = 'id = ' + data.name._id.$oid;
              }
            });
-        } else {
-          alert("passwords do not match")
-        }
       }
      });
         $('#logout').click(function() {
@@ -148,12 +179,13 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign Up<span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
           <form>
+            <h6>Username:<br><span id='usernameerror'></span></h6>
             <input type="text" class="form-control signuplist" placeholder="Username" id="newusername">
-            <li class="divider"></li>
-            <input type="text" class="form-control signuplist" placeholder="Email" id="newemail">
-            <li class="divider"></li>
+            <h6>E-mail:<br><span id='emailerror'></span></h6>
+            <input type="text" class="form-control signuplist" placeholder="E-mail" id="newemail">
+            <h6>Password:<br><span id='passworderror'></span></h6>
             <input type="text" class="form-control signuplist" placeholder="Password" id="newpassword">
-            <li class="divider"></li>
+            <h6>Verify Password:</h6>
             <input type="text" class="form-control signuplist" placeholder="Verify Password" id="newpassword2">
             <li class="divider"></li>
             <button class="btn btn-default signuplist" id="signup">Sign Up!</button>

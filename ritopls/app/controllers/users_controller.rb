@@ -10,13 +10,20 @@ class UsersController < ApplicationController
 		@user = User.find_by({id: data_json})
 	end
 
-	def usernamefind
-		data_json = request.body.read
-		@user = User.find_by({username: data_json})
-	end
-	
-	def emailfind
-		data_json = request.body.read
-		@user = User.find_by({email: data_json})
+	def userfind
+		data_json = JSON.parse(request.body.read)
+		
+		begin
+			@newusername = User.find_by({username: data_json['newusername']})
+		rescue 
+			@newusername = nil
+		end
+
+		begin
+			@newemail = User.find_by({email: data_json['newemail']})
+		rescue
+			@newemail = nil
+		end
+
 	end
 end
