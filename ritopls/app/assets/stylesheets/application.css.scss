@@ -32,3 +32,12 @@ h6 {
 span {
 	color:red;
 }
+
+#loggingerror, #loggedinfo {
+	display: inline-block;
+}
+
+#username, #password, #search {
+	margin: 1px 0px;
+	width: 140px;
+}

@@ -12,9 +12,13 @@
     var username = $('#username').val().toLowerCase();
     var usernamebox = document.getElementById('username')
     var passwordbox = document.getElementById('password')
+    document.getElementById("loggedinfo").style.display = 'none'
     var logged_in = function(data){
-      logged.innerHTML = "Logged in as: " + data.name.username;
+      logged.innerHTML = data.name.username;
       $('#username').val = data.name.username
+      document.getElementById("loggedhide").style.display = 'none'
+      document.getElementById("loggedinfo").style.display = 'inline-block'
+      loggingerror.style.display = 'none'
     }
     $.ajax({
         url: "/users",
@@ -45,7 +49,8 @@
             logged_in(data);
             document.cookie = 'id = ' + data.name._id.$oid;
           } else {
-            logged.innerHTML = "Invalid username or password.";
+            usernamebox.style.borderColor = 'red'
+            passwordbox.style.borderColor = 'red'
           }
          }
        });
@@ -55,7 +60,7 @@
       var newusername = $('#newusername').val().toLowerCase();
       var newemail = $('#newemail').val().toLowerCase();
       var newpassword = $('#newpassword').val();
-      var newpassword2 = $('#newpassword2').val();
+      var newpassword2 = $('#newpassword2').val()
       var usernameinput = document.getElementById('newusername')
       var emailinput = document.getElementById('newemail')
       var passwordinput = document.getElementById('newpassword')
@@ -142,7 +147,6 @@
       }
      });
         $('#logout').click(function() {
-      console.log("dsf")
       document.cookie = 'id = ;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     })
   }
@@ -162,11 +166,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Rito Pls</a>
+      <a class="navbar-brand" href="/">Rito Pls</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <div id="loggedhide">
         <form class="navbar-form navbar-left">
         <div class="form-group">
 	        	<input type="text" class="form-control" id="username" placeholder="Username" >
@@ -191,13 +196,16 @@
             <button class="btn btn-default signuplist" id="signup">Sign Up!</button>
             </form>
           </ul>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
         <form class="navbar-form navbar-right">
         <div class="form-group">
-          <div class="navbar-brand" id="logged"></div>
-          <button class="btn btn-default" id="logout">Logout</button>
-        	<input type="text" class="form-control" placeholder="Search">
+          <div id="loggedinfo">
+            <div class="btn btn-default" id="logged"></div>
+            <button class="btn btn-default" id="logout">Logout</button>
+          </div>
+        	<input type="text" class="form-control" id="search" placeholder="Search">
         </div>
         </form>
     </div><!-- /.navbar-collapse -->
@@ -206,7 +214,6 @@
 <body>
 
 <%= yield %>
-<%= debug(params) %>
 
 </body>
 </html>
