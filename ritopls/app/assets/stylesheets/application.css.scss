@@ -29,15 +29,17 @@ h6 {
 	margin: 5px 11px;
 }
 
-span {
+#loginform{
+	padding-right:5px;
+}
+.error {
 	color:red;
 }
 
-#loggingerror, #loggedinfo {
-	display: inline-block;
+#username, #password, #search {
+	width: 130px;
 }
 
-#username, #password, #search {
-	margin: 1px 0px;
-	width: 140px;
+#searchbar {
+	padding-right: 0px;
 }

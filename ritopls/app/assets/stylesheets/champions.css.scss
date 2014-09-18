@@ -1,3 +1,98 @@
 // Place all the styles related to the champions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.champions {
+	margin: 0px;
+	margin-bottom: 0px;
+	margin-right: 0px;
+	margin-left: 0px;
+	display: inline-block;
+}
+
+.mycontainer {
+	text-align: center;
+	margin: 0 auto;
+}
+.stats {
+	display: none;
+	width: inherit;
+	clear: both;
+	margin: 5px;
+	padding: 10px;
+	background: #ebebeb;
+	height: 200px;
+	margin-top: 0px;
+	margin-left: 0px;
+}
+
+.champname {
+	margin: 0px 2px 0px 5px;
+	text-align: center;
+	width: 120px;
+}
+
+.votes {
+	position: relative;
+	display: inline-block;
+	float: right;
+	margin-left: 1px;
+}
+.btn-primary.vote {
+	margin-left: -1px;
+}
+
+#balanced {
+	display: none;
+}
+
+.btn-primary.vote:hover {
+	width: 100px;
+	margin-left: -51px;
+	&::after{
+		content: 'Balanced';	
+	};
+	#balancednum {
+			display: none;
+	};
+}
+.btn-success.vote:hover {
+	width: 100px;
+	margin-left: -51px;
+	&::after{
+		content: 'Buff';	
+	};
+	#buffnum {
+			display: none;
+	};
+}
+.btn-danger.vote:hover {
+	width: 100px;
+	margin-left: -51px;
+	&::after{
+		content: 'Nerf';	
+	};
+	#nerfnum {
+			display: none;
+	};
+}
+.btn-warning.vote:hover {
+	width: 100px;
+	margin-left: -51px;
+	&::after{
+		content: 'Rework';	
+	};
+	#reworknum {
+			display: none;
+	};
+}
+
+.vote {
+	float: left;
+	clear: both;
+	width: 50px;
+	height: 22px;
+	padding: 0px;
+	margin: 0px;
+	border-radius: 0%;
+}

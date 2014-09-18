@@ -5,25 +5,30 @@
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+  
+
   <script>
  
   var onload = function() {
-    var cookie = document.cookie.slice(3)
+    var cookie = document.cookie.slice(3).split(";")[0]
+    console.log(cookie)
     var username = $('#username').val().toLowerCase();
     var usernamebox = document.getElementById('username')
     var passwordbox = document.getElementById('password')
+    var searchbox = $('#search').val()
+    searchbox = "annie"
     document.getElementById("loggedinfo").style.display = 'none'
     var logged_in = function(data){
       logged.innerHTML = data.name.username;
       $('#username').val = data.name.username
       document.getElementById("loggedhide").style.display = 'none'
       document.getElementById("loggedinfo").style.display = 'inline-block'
-      loggingerror.style.display = 'none'
     }
     $.ajax({
-        url: "/users",
+        url: "/find",
         data: cookie,
         method: 'post',
+        dataType: 'json',
         success: function(data) {
           logged_in(data);
         }
@@ -103,7 +108,7 @@
             password2input.style.borderColor = 'green'
           }
       $.ajax({
-        url: "finduser",
+        url: "/finduser",
         data: json,
         method: 'post',
         success: function(data) {
@@ -136,8 +141,8 @@
 
           $.ajax({
             url: "/signup.json",
-            data: json,
             method: 'post',
+            data: json,
             dataType: 'json',
             success: function(data) {
               logged_in(data);
@@ -147,16 +152,19 @@
       }
      });
         $('#logout').click(function() {
-      document.cookie = 'id = ;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+          document.cookie = 'id = ;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    })
+        $('#searchbtn').click(function() {
+          
     })
   }
 
-    $(document).ready =(onload)
+ 
     $(window).bind('page:change', onload)   
 
   </script>
 </head>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -171,43 +179,59 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <div id="loggedhide">
-        <form class="navbar-form navbar-left">
-        <div class="form-group">
-	        	<input type="text" class="form-control" id="username" placeholder="Username" >
-	          <input type="text" class="form-control" id="password" placeholder="Password" >
-        </div>
-            <button type="submit" class="btn btn-default" id="login" >Login</button>
-        </form>
-        <ul class="nav navbar-nav">
-          <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign Up<span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-          <form>
-            <h6>Username:<br><span id='usernameerror'></span></h6>
-            <input type="text" class="form-control signuplist" placeholder="Username" id="newusername">
-            <h6>E-mail:<br><span id='emailerror'></span></h6>
-            <input type="text" class="form-control signuplist" placeholder="E-mail" id="newemail">
-            <h6>Password:<br><span id='passworderror'></span></h6>
-            <input type="text" class="form-control signuplist" placeholder="Password" id="newpassword">
-            <h6>Verify Password:</h6>
-            <input type="text" class="form-control signuplist" placeholder="Verify Password" id="newpassword2">
-            <li class="divider"></li>
-            <button class="btn btn-default signuplist" id="signup">Sign Up!</button>
-            </form>
-          </ul>
-          </li>
-        </ul>
-      </div>
-        <form class="navbar-form navbar-right">
-        <div class="form-group">
-          <div id="loggedinfo">
-            <div class="btn btn-default" id="logged"></div>
-            <button class="btn btn-default" id="logout">Logout</button>
+      <div class="navbar-left" id="loggedhide">
+        <form class="navbar-form navbar-left" id="loginform">
+          <div class="form-group">
+  	        	<input type="text" class="form-control" id="username" placeholder="Username" >
+  	          <input type="text" class="form-control" id="password" placeholder="Password" >
+            <div class="btn-group">
+                <button type="submit" class="btn btn-default" id="login">Login</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Action</a></li>
+                  <li><a href="#">Another action</a></li>
+                  <li><a href="#">Something else here</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+            </div>
           </div>
-        	<input type="text" class="form-control" id="search" placeholder="Search">
-        </div>
         </form>
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Sign Up<span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <form>
+                  <li><h6>Username:<br><span class='error' id='usernameerror'></span></h6></li>
+                  <li><input type="text" class="form-control signuplist" placeholder="Username" id="newusername"></li>
+                  <li><h6>E-mail:<br><span class='error' id='emailerror'></span></h6></li>
+                  <li><input type="text" class="form-control signuplist" placeholder="E-mail" id="newemail"></li>
+                  <li><h6>Password:<br><span class='error' id='passworderror'></span></h6></li>
+                  <li><input type="text" class="form-control signuplist" placeholder="Password" id="newpassword"></li>
+                  <li><h6>Verify Password:</h6></li>
+                  <li><input type="text" class="form-control signuplist" placeholder="Verify Password" id="newpassword2"></li>
+                  <li class="divider"></li>
+                  <li><button class="btn btn-default signuplist" id="signup">Sign Up!</button></li>
+                </form>
+              </ul>
+            </li>
+          </ul>
+      </div>
+      <form class="navbar-form navbar-right" id="searchbar">
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" placeholder="Search">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" id="searchbtn"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+        </div><!-- /input-group -->
+      </form>
+      <form class="navbar-form navbar-right" id="loggedinfo">
+        <div class="btn btn-default" id="logged"></div>
+          <button class="btn btn-default" id="logout">Logout</button>
+      </form>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
