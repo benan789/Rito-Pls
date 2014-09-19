@@ -13,6 +13,7 @@ Ritopls::Application.routes.draw do
   post '/votebuff' => 'champions#votebuff'
   post '/votenerf' => 'champions#votenerf'
   post '/voterework' => 'champions#voterework'
+  post '/fingerprint' => 'fingerprints#fingerprint'
 
   get 'champions/:id' => 'champions#show', as: :champion
   # resources :sessions

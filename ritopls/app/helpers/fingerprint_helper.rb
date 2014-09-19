@@ -1,0 +1,2 @@
+module FingerprintHelper
+end

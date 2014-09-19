@@ -8,30 +8,69 @@ class ChampionsController < ApplicationController
 	end
 
 	def votebalanced
+		useragent = Digest::SHA1.hexdigest(request.user_agent + request.remote_ip)
+  		@fingerprint = Fingerprint.find_by({hash: useragent})
 		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
-		@champion[:balanced] += 1
-		@champion.save
+  		@fingerprint[datajson] ||= [0,0,0]
+		if @fingerprint[datajson][0] != 1
+			@champion[:balanced] += 1
+			@champion[:buff] -= 1 if @fingerprint[datajson][0] == 2 
+			@champion[:nerf] -= 1 if @fingerprint[datajson][0] == 3
+			@champion.save
+			@fingerprint[datajson][0] = 1
+			@fingerprint.upsert
+		end
 	end
 
 	def votebuff
+		useragent = Digest::SHA1.hexdigest(request.user_agent + request.remote_ip)
+  		@fingerprint = Fingerprint.find_by({hash: useragent})
 		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
-		@champion[:buff] += 1
-		@champion.save
+  		@fingerprint[datajson] ||= [0,0,0]
+		if @fingerprint[datajson][0] != 2
+			@champion[:buff] += 1
+			@champion[:balanced] -= 1 if @fingerprint[datajson][0] == 1
+			@champion[:nerf] -= 1 if @fingerprint[datajson][0] == 3
+			@champion.save
+			@fingerprint[datajson][0] = 2
+			@fingerprint.upsert
+		end
 	end
 
 	def votenerf
-		datajson = request.body.read
+		useragent = Digest::SHA1.hexdigest(request.user_agent + request.remote_ip)
+  		@fingerprint = Fingerprint.find_by({hash: useragent})
+  		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
-		@champion[:nerf] += 1
-		@champion.save
+		@fingerprint[datajson] ||= [0,0,0]
+		if @fingerprint[datajson][0] != 3
+			@champion[:nerf] += 1
+			@champion[:balanced] -= 1 if @fingerprint[datajson][0] == 1
+			@champion[:buff] -= 1 if @fingerprint[datajson][0] == 2
+			@champion.save
+			@fingerprint[datajson][0] = 3
+			@fingerprint.upsert
+		end
 	end
 
 	def voterework
-		datajson = request.body.read
+		useragent = Digest::SHA1.hexdigest(request.user_agent + request.remote_ip)
+  		@fingerprint = Fingerprint.find_by({hash: useragent})
+  		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
-		@champion[:rework] += 1
-		@champion.save
+  		@fingerprint[datajson] ||= [0,0,0]
+		if @fingerprint[datajson][1] == 0
+			@champion[:rework] += 1
+			@champion.save
+			@fingerprint[datajson][1] = 1
+			@fingerprint.upsert
+		else
+			@champion[:rework] -= 1
+			@champion.save
+			@fingerprint[datajson][1] = 0
+			@fingerprint.upsert
+		end
 	end
 end

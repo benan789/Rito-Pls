@@ -12,7 +12,10 @@ $(window).bind('page:change', function() {
             data: championname,
             method: 'post',
             success: function(data){
-            	$(this).children('#balancednum').html(data.name.balanced)
+            	$(this).children('#balancednum').html(data.name.balanced);
+            	$(this).siblings('.btn-success').children('#buffnum').html(data.name.buff);
+            	$(this).siblings('.btn-danger').children('#nerfnum').html(data.name.nerf);
+            	$(this).siblings('.btn-warning').children('#reworknum').html(data.name.rework);
             },
             context: this
            });
@@ -24,7 +27,10 @@ $(window).bind('page:change', function() {
             data: championname,
             method: 'post',
             success: function(data){
-            	$(this).children('#buffnum').html(data.name.buff)
+            	$(this).siblings('.btn-primary').children('#balancednum').html(data.name.balanced);
+            	$(this).children('#buffnum').html(data.name.buff);
+            	$(this).siblings('.btn-danger').children('#nerfnum').html(data.name.nerf);
+            	$(this).siblings('.btn-warning').children('#reworknum').html(data.name.rework);
             },
             context: this
            });
@@ -36,7 +42,10 @@ $(window).bind('page:change', function() {
             data: championname,
             method: 'post',
             success: function(data){
+            	$(this).siblings('.btn-primary').children('#balancednum').html(data.name.balanced)
+            	$(this).siblings('.btn-success').children('#buffnum').html(data.name.buff)
             	$(this).children('#nerfnum').html(data.name.nerf)
+            	$(this).siblings('.btn-warning').children('#reworknum').html(data.name.rework)
             },
             context: this
            });

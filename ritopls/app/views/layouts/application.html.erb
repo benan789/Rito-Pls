@@ -10,6 +10,14 @@
   <script>
  
   var onload = function() {
+    $.ajax({
+        url: "/fingerprint",
+        method: 'post',
+        dataType: 'json',
+        success: function(data) {
+          console.log(data.name)
+        }
+      });
     var cookie = document.cookie.slice(3).split(";")[0]
     console.log(cookie)
     var username = $('#username').val().toLowerCase();
