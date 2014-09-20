@@ -15,6 +15,10 @@ Ritopls::Application.routes.draw do
   post '/voterework' => 'champions#voterework'
   post '/fingerprint' => 'fingerprints#fingerprint'
 
+  get 'champions/balanced' => 'champions#balanced', as: :balanced
+  get 'champions/buff' => 'champions#buff', as: :buff
+  get 'champions/nerf' => 'champions#nerf', as: :nerf
+  get 'champions/rework' => 'champions#rework', as: :rework
   get 'champions/:id' => 'champions#show', as: :champion
   # resources :sessions
 

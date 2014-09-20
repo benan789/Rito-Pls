@@ -3,6 +3,22 @@ class ChampionsController < ApplicationController
 		@champions = Champion.all
 	end
 
+	def balanced
+		@champions = Champion.all
+	end
+
+	def buff
+		@champions = Champion.all
+	end
+
+	def nerf
+		@champions = Champion.all
+	end
+
+	def rework
+		@champions = Champion.all
+	end
+
 	def show
 		@champion = Champion.find(params[:id])
 	end
