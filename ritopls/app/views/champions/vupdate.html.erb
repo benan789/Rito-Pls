@@ -1,0 +1,6 @@
+<div class="jumbotron">
+OP or Not OP
+</div>
+
+<% @champion_names = @champions.sort_by { |champion| [-champion[:visual_update], champion[:name]] } %>
+<%= render 'champions', object: @champion_names %>

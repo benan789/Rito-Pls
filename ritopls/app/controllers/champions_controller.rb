@@ -19,8 +19,17 @@ class ChampionsController < ApplicationController
 		@champions = Champion.all
 	end
 
+	def vupdate
+		@champions = Champion.all
+	end
+
 	def show
-		@champion = Champion.find(params[:id])
+		@champion = Champion.find(params[:id].to_i)
+		begin
+			@comments = Comment.where(champion_id: params[:id])
+		rescue
+			@comments = nil
+		end
 	end
 
 	def votebalanced
@@ -29,6 +38,7 @@ class ChampionsController < ApplicationController
 		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
   		@fingerprint[datajson] ||= [0,0,0]
+
 		if @fingerprint[datajson][0] != 1
 			@champion[:balanced] += 1
 			@champion[:buff] -= 1 if @fingerprint[datajson][0] == 2 
@@ -45,6 +55,7 @@ class ChampionsController < ApplicationController
 		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
   		@fingerprint[datajson] ||= [0,0,0]
+
 		if @fingerprint[datajson][0] != 2
 			@champion[:buff] += 1
 			@champion[:balanced] -= 1 if @fingerprint[datajson][0] == 1
@@ -61,6 +72,7 @@ class ChampionsController < ApplicationController
   		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
 		@fingerprint[datajson] ||= [0,0,0]
+
 		if @fingerprint[datajson][0] != 3
 			@champion[:nerf] += 1
 			@champion[:balanced] -= 1 if @fingerprint[datajson][0] == 1
@@ -77,6 +89,7 @@ class ChampionsController < ApplicationController
   		datajson = request.body.read
 		@champion = Champion.find_by({key: datajson})
   		@fingerprint[datajson] ||= [0,0,0]
+
 		if @fingerprint[datajson][1] == 0
 			@champion[:rework] += 1
 			@champion.save
@@ -86,6 +99,26 @@ class ChampionsController < ApplicationController
 			@champion[:rework] -= 1
 			@champion.save
 			@fingerprint[datajson][1] = 0
+			@fingerprint.upsert
+		end
+	end
+
+	def votevupdate
+		useragent = Digest::SHA1.hexdigest(request.user_agent + request.remote_ip)
+  		@fingerprint = Fingerprint.find_by({hash: useragent})
+  		datajson = request.body.read
+		@champion = Champion.find_by({key: datajson})
+  		@fingerprint[datajson] ||= [0,0,0]
+  		
+		if @fingerprint[datajson][2] == 0
+			@champion[:visual_update] += 1
+			@champion.save
+			@fingerprint[datajson][2] = 1
+			@fingerprint.upsert
+		else
+			@champion[:visual_update] -= 1
+			@champion.save
+			@fingerprint[datajson][2] = 0
 			@fingerprint.upsert
 		end
 	end

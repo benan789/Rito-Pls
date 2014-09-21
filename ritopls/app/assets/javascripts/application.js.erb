@@ -1,0 +1,180 @@
+// This is a manifest file that'll be compiled into application.js, which will include all the files
+// listed below.
+//
+// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
+// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
+//
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// compiled file.
+//
+// Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
+// about supported directives.
+//
+//= require jquery
+//= require bootstrap-sprockets
+//= require tab
+//= require jquery_ujs
+//= require turbolinks
+//= require_tree .
+ 
+  var onload = function() {
+    $.ajax({
+        url: "/fingerprint",
+        method: 'post',
+        dataType: 'json',
+        success: function(data) {
+          console.log(data.name)
+        }
+      });
+    var cookie = document.cookie.slice(3).split(";")[0]
+    console.log(cookie)
+    var username = $('#username').val().toLowerCase();
+    var usernamebox = document.getElementById('username')
+    var passwordbox = document.getElementById('password')
+    var searchbox = $('#search').val()
+    searchbox = "annie"
+    document.getElementById("loggedinfo").style.display = 'none'
+    var logged_in = function(data){
+      logged.innerHTML = data.name.username;
+      $('#username').val = data.name.username
+      document.getElementById("loggedhide").style.display = 'none'
+      document.getElementById("loggedinfo").style.display = 'inline-block'
+    }
+    $.ajax({
+        url: "/find",
+        data: cookie,
+        method: 'post',
+        dataType: 'json',
+        success: function(data) {
+          logged_in(data);
+        }
+      });
+
+    $('#login').click(function(event) {
+      event.preventDefault();
+      var logged = document.getElementById('logged')
+      var username = $('#username').val();
+      var password = $('#password').val();
+      var object = {
+        username: username,
+        password: password
+      };
+      var json = JSON.stringify(object);
+
+      $.ajax({
+        url: "/login.json",
+        data: json,
+        method: 'post',
+        dataType: 'json',
+        success: function(data) {
+          if (data["status"] == "SUCCESS") {
+            logged_in(data);
+            document.cookie = 'id = ' + data.name._id.$oid;
+          } else {
+            usernamebox.style.borderColor = 'red'
+            passwordbox.style.borderColor = 'red'
+          }
+         }
+       });
+     });
+    $('#signup').click(function(event) {
+      event.preventDefault();
+      var newusername = $('#newusername').val().toLowerCase();
+      var newemail = $('#newemail').val().toLowerCase();
+      var newpassword = $('#newpassword').val();
+      var newpassword2 = $('#newpassword2').val()
+      var usernameinput = document.getElementById('newusername')
+      var emailinput = document.getElementById('newemail')
+      var passwordinput = document.getElementById('newpassword')
+      var password2input = document.getElementById('newpassword2')
+      var usernameerror = document.getElementById('usernameerror')
+      var emailerror = document.getElementById('emailerror')
+      var passworderror = document.getElementById('passworderror')
+      var object = {
+        newusername: newusername,
+        newemail: newemail
+      };
+      var json = JSON.stringify(object);
+
+      if(newusername == "") {
+        usernameerror.innerHTML = "Enter a Username";
+        usernameinput.style.borderColor = 'red'
+      } else {
+        usernameerror.innerHTML = ""
+        usernameinput.style.borderColor = 'green'
+      }
+      if(newemail == "") {
+        emailerror.innerHTML = "Enter an E-mail"
+        emailinput.style.borderColor = 'red'
+      } else {
+        emailerror.innerHTML = ""
+        emailinput.style.borderColor = 'green'
+      }
+      if(newpassword == "") {
+        passworderror.innerHTML = "Enter a Password"
+        passwordinput.style.borderColor = 'red'
+      } else {
+        passworderror.innerHTML = ""
+      }
+      if(newpassword !== "" && newpassword !== newpassword2) {
+            passworderror.innerHTML = "Passwords do not match"
+            passwordinput.style.borderColor = 'red'
+            password2input.style.borderColor = 'red'
+          } else if(newpassword !== "") {
+            passwordinput.style.borderColor = 'green'
+            password2input.style.borderColor = 'green'
+          }
+      $.ajax({
+        url: "/finduser",
+        data: json,
+        method: 'post',
+        success: function(data) {
+          if(newusername !== "" && data.newusername !== null) {
+            usernameerror.innerHTML = "Username already exists"
+            usernameinput.style.borderColor = 'red'
+          } else if(newusername !== "") {
+            usernameinput.style.borderColor = 'green'
+          }
+          if(newemail !== "" && data.newemail !== null) {
+            emailerror.innerHTML = "E-mail already exists"
+            emailinput.style.borderColor = 'red'
+          } else if(newemail !== "") {
+            emailinput.style.borderColor = 'green'
+          }
+          if(newusername !== "" && newemail !== "" && newpassword !== "" && data.newusername == null && data.newemail == null && newpassword == newpassword2) {
+              signup();
+          }
+       }
+      });
+    
+
+      var signup = function() {
+          var object = {
+            username: newusername,
+            email: newemail,
+            passwordarr: [newpassword, newpassword2]
+          };
+          var json = JSON.stringify(object);
+
+          $.ajax({
+            url: "/signup.json",
+            method: 'post',
+            data: json,
+            dataType: 'json',
+            success: function(data) {
+              logged_in(data);
+              document.cookie = 'id = ' + data.name._id.$oid;
+             }
+           });
+      }
+     });
+        $('#logout').click(function() {
+          document.cookie = 'id = ;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    })
+        $('#searchbtn').click(function() {
+          
+    })
+  }
+
+ 
+    $(window).bind('page:change', onload)   

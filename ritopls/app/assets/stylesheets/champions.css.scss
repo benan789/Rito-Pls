@@ -8,11 +8,19 @@
 	margin-right: 0px;
 	margin-left: 0px;
 	display: inline-block;
+	padding: 0px;
+	border-radius: 4%;
 }
-
+.championwell {
+	margin-top: 100px;
+}
 .mycontainer {
 	text-align: center;
 	margin: 0 auto;
+}
+
+#showpg > .btn {
+	height: 120px;	
 }
 
 .topcontainer {
@@ -94,6 +102,22 @@
 			display: none;
 	};
 }
+
+.btn-warning.vote {
+	margin: 5px 0px;
+}
+
+.btn-info.vote:hover {
+	width: 100px;
+	margin-left: -51px;
+	&::after{
+		content: 'Visual Update';	
+	};
+	#vupdatenum {
+			display: none;
+	};
+}
+
 
 .vote {
 	float: left;

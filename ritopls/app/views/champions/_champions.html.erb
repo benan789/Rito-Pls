@@ -1,0 +1,46 @@
+<div class="mycontainer">
+<div class="topcontainer">
+	<div class="btn-group buttoncontainer">
+	  <button type="button" class="btn btn-default disabled">Sort By:</button>
+	  <%= link_to "Name", root_path, class: "btn btn-default" %>
+	  <%= link_to "Balanced", balanced_path, class: "btn btn-primary" %>
+	  <%= link_to "Buff", buff_path, class: "btn btn-success" %>
+	  <%= link_to "Nerf", nerf_path, class: "btn btn-danger" %>
+	  <%= link_to "Rework", rework_path, class: "btn btn-warning" %>
+	  <%= link_to "Visual Update", vupdate_path, class: "btn btn-info" %>
+	</div>
+</div>
+<% @champion_names.each do |champion| %>
+		<div id="characters" class="btn-group characters">
+			<%= link_to champion_path(champion), class: "champions", id: champion.key do %>
+				<%= image_tag champion.key + '_Square_0.jpeg' %>
+			<% end %>
+			<div class="votes">
+				  <button type="button" class="btn btn-primary vote"><span id='balancednum'><%= champion.balanced %></span></button>
+				  <button type="button" class="btn btn-success vote"><span id='buffnum'><%= champion.buff %></span></button>
+				  <button type="button" class="btn btn-danger vote"><span id='nerfnum'><%= champion.nerf %></span></button>
+				  <button type="button" class="btn btn-warning vote"><span id='reworknum'><%= champion.rework %></span></button>
+				  <button type="button" class="btn btn-info vote"><span id='vupdatenum'><%= champion.visual_update %></span></button>
+			</div>
+			<div class="champname"><%= champion.name %></div>
+		</div>
+		<div class="stats <%= champion.key %>">
+			<div class="btn-group">
+			  <button type="button" class="btn btn-primary"><%= champion.balanced %></button>
+			  <button type="button" class="btn btn-primary">Balanced</button>
+			</div>
+			<div class="btn-group">
+			  <button type="button" class="btn btn-success"><%= champion.buff %></button>
+			  <button type="button" class="btn btn-success">Buff</button>
+			</div>
+			<div class="btn-group">
+			  <button type="button" class="btn btn-danger"><%= champion.nerf %></button>
+			  <button type="button" class="btn btn-danger">Nerf</button>
+			</div>
+			<div class="btn-group">
+			  <button type="button" class="btn btn-warning"><%= champion.rework %></button>
+			  <button type="button" class="btn btn-warning">Rework</button>
+			</div>
+  		</div>
+<% end %>
+</div>

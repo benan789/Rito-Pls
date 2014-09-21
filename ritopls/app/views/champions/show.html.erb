@@ -1,1 +1,44 @@
-<%= @champion.name %>
+<!-- <script>
+$(window).bind('page:change', function() {
+	var cookie = document.cookie.slice(3).split(";")[0]
+	$('#post').click(function(){
+		console.log(cookie)
+		   $.ajax({
+		      url: "/comment",
+		      data: cookie,
+		      method: 'post',
+		      dataType: 'json',
+		      success: function(data) {
+		        console.log(data)
+      		}
+ 	   });
+	})
+})
+</script> -->
+
+<div class='container'>
+	<div class="well championwell">
+			<%= image_tag @champion.key + '_Square_0.jpeg', class: "champions" %>	
+	<div class="btn-group" id="showpg">
+		<button type="button" class="btn btn-primary"><span id='balancednum'>Balanced <br><br><%= @champion.balanced %></span></button>
+		<button type="button" class="btn btn-success"><span id='buffnum'>Buff <br><br><%= @champion.buff %></span></button>
+		<button type="button" class="btn btn-danger"><span id='nerfnum'>Nerf <br><br><%= @champion.nerf %></span></button>
+		<button type="button" class="btn btn-warning"><span id='reworknum'>Rework <br><br><%= @champion.rework %></span></button>
+		<button type="button" class="btn btn-info"><span id='vupdatenum'>Visual Update <br><br><%= @champion.visual_update %></span></button>
+	</div>
+	</div>
+	<h1><%= @champion.name %></h1>
+	<%= form_for(:comment, url: comment_path) do |f| %>
+		<%= f.text_field :text %>
+		<%= f.hidden_field :champion_id, :value => @champion.id %>
+		<%= f.submit "Post" %>
+	<% end %>
+	<div>
+	<ul class="list-group">
+		<% @comments.each do |comment| %>
+			<li class="list-group-item"><%= comment.text %></li>
+		<% end %>
+	</div>
+	</ul>
+
+</div>
