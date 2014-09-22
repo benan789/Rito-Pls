@@ -14,9 +14,6 @@
 
 	<ul class="list-group">
 		<% @comments.each do |comment| %>
-			<% if comment[:text].empty? == true %>
-			<% comment.destroy %>
-			<% else %>
 			<li class="list-group-item" ><%= comment.text %></li>
 			<div id="commentuser">Posted By: <%= comment.username %></div>
 			<% if comment.user_id.to_s == cookies[:id] %>
@@ -25,7 +22,6 @@
 			<%= link_to "Delete", destroy_path(comment), method: :delete %>
 			</div>
 			<% end %>
-			<% end %>
 		<% end %>
 	</ul>
 </div>
@@ -33,11 +29,11 @@
 </div>
 <div class="navbar navbar-default navbar-fixed-bottom">
 	<div class="container">
-		<%= form_for(:comment, url: comment_path) do |f| %>
+		<%= form_for @comment, url: comment_update_path do |f| %>
 		<div class="input-group post">
 			<%= f.text_field :text, class: "form-control" %>
 			<%= f.hidden_field :champion_id, :value => @champion.id %>
-			<span class="input-group-btn"><% if cookies[:id] %><%= f.submit "Post", class: "btn btn-default" %><% else %><%= f.submit "Login to post", class: "btn btn-default disabled" %><% end %></span>
+			<span class="input-group-btn"><% if cookies[:id] %><%= f.submit "Edit", class: "btn btn-default" %><% else %><%= f.submit "Login to post", class: "btn btn-default disabled" %><% end %></span>
 		<% end %>
 		</div>
 	</div>

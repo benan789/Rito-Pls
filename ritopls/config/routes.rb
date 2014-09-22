@@ -7,16 +7,17 @@ Ritopls::Application.routes.draw do
 
   post '/find' => 'users#find'
   post '/finduser' => 'users#userfind'
-  post 'login/' => 'sessions#create'
-  post 'signup/' => 'users#create'
+  post '/login' => 'sessions#create'
+  post '/signup' => 'users#create'
   post '/votebalanced' => 'champions#votebalanced'
   post '/votebuff' => 'champions#votebuff'
   post '/votenerf' => 'champions#votenerf'
   post '/voterework' => 'champions#voterework'
   post '/votevupdate' => 'champions#votevupdate'
   post '/fingerprint' => 'fingerprints#fingerprint'
-  post '/application' => 'application#current_user'
   post '/comment' => 'comments#create'
+  post '/edit' => 'champions#show'
+
 
   get 'champions/balanced' => 'champions#balanced', as: :balanced
   get 'champions/buff' => 'champions#buff', as: :buff
@@ -24,8 +25,10 @@ Ritopls::Application.routes.draw do
   get 'champions/rework' => 'champions#rework', as: :rework
   get 'champions/vupdate' => 'champions#vupdate', as: :vupdate
   get 'champions/:id' => 'champions#show', as: :champion
+  get 'comments/:id/edit' => 'comments#edit', as: :edit_comment
+  patch 'comment/:id' => 'comments#update', as: :comment_update
   # resources :sessions
-
+  delete 'comments/:id' => 'comments#destroy', as: :destroy
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

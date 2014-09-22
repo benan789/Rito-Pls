@@ -11,8 +11,8 @@
 	padding: 0px;
 	border-radius: 4%;
 }
-.championwell {
-	margin-top: 100px;
+.showview {
+	margin-top: 50px;
 }
 .mycontainer {
 	text-align: center;
@@ -25,6 +25,10 @@
 
 .topcontainer {
 	width: 100%;
+}
+
+.blank {
+	height: 50px;
 }
 
 .buttoncontainer {
@@ -118,6 +122,14 @@
 	};
 }
 
+.post {
+	margin: 7px;
+}
+
+.delete {
+	float: right;
+}
+
 
 .vote {
 	float: left;
@@ -127,4 +139,8 @@
 	padding: 0px;
 	margin: 0px;
 	border-radius: 0%;
+}
+
+#commentuser {
+	display: inline-block;
 }

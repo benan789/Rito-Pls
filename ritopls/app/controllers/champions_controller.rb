@@ -24,6 +24,11 @@ class ChampionsController < ApplicationController
 	end
 
 	def show
+		# begin
+		# 	@current_user ||= User.find_by(id: cookies[:id])
+		# rescue
+		# 	@current_user = nil
+		# end
 		@champion = Champion.find(params[:id].to_i)
 		begin
 			@comments = Comment.where(champion_id: params[:id])
