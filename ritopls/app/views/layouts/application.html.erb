@@ -41,9 +41,6 @@ var onload = function() {
 
   $('#logout').click(function() {
     document.cookie = 'id = ; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
-    document.cookie = 'id = ; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    document.cookie = 'id = ; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    document.cookie = 'id = ; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
   })
 
   $('#login').click(function(event) {
@@ -113,6 +110,7 @@ var onload = function() {
         success: function(data) {
           logged_in(data);
           document.cookie = 'id = ' + data.name._id.$oid + ';expires=Thu, 01 Jan 2020 00:00:01 GMT; path=/';
+          location.reload();
         }
       });
     }
